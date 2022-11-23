@@ -201,7 +201,7 @@ function collectCoins(luigi, coin) {
     score += 1;
     currentScore.setText("Current score: " + score);
 
-    if (score == 1) {
+    if (score == 8) {
         destroyBlockage();
     }
 
