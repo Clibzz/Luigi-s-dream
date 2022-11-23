@@ -207,6 +207,7 @@ function collectCoins(luigi, coin) {
 
     if (score == 10) {
         this.physics.pause();
+        currentScore.destroy();
         winner = this.add.text(160, 100, "You win!", { 
         align: "center",
         fontSize: 100,
