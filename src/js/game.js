@@ -18,7 +18,6 @@ var config = {
 }
 
 var luigi;
-var goomba;
 var floors;
 var inputs;
 var coins;
@@ -41,10 +40,7 @@ function preload() {
     this.load.image("fire", "./src/images/fire.png");
     this.load.image("bouncer", "./src/images/bouncer.png");
     this.load.image("button", "./src/images/button.png");
-    this.load.spritesheet("goomba", "./src/images/goomba.png", {
-        frameWidth: 32,
-        frameHeight: 48
-    });
+    this.load.image("finish", "./src/images/finish.png")
     this.load.spritesheet("luigi", "./src/images/character.png", {
         frameWidth: 32,
         frameHeight: 48
@@ -53,6 +49,9 @@ function preload() {
 
 function create() {
     this.add.image(400, 300, "background");
+
+    finish = this.physics.add.staticGroup();
+    finish.create(65, 350, "finish");
 
     bouncers = this.physics.add.staticGroup();
     bouncers.create(390, 270, "bouncer");
@@ -172,6 +171,7 @@ function create() {
     this.physics.add.overlap(luigi, teleporters, teleportPlayer, null, this);
     this.physics.add.overlap(luigi, utilities, burnPlayer, null, this);
     this.physics.add.overlap(luigi, bouncers, bouncePlayer, null, this);
+    this.physics.add.overlap(luigi, finish, win, null, this);
 }
 
 function update() {
@@ -204,21 +204,33 @@ function collectCoins(luigi, coin) {
     if (score == 8) {
         destroyBlockage();
     }
+}
 
-    if (score == 10) {
-        this.physics.pause();
-        currentScore.destroy();
-        winner = this.add.text(160, 100, "You win!", { 
-        align: "center",
-        fontSize: 100,
-        fill: "#4CBB17" 
+/**
+ * Function for ending the game when hitting the finishline
+ */
+function win() {
+    this.physics.pause();
+    currentScore.destroy();
+    winner = this.add.text(160, 100, "You win!", { 
+    align: "center",
+    fontSize: 100,
+    fill: "#4CBB17" 
+    });
+    if (score == 1) {
+        achievedScore = this.add.text(75, 185, "You scored " + score + " point!", {
+            align: "center",
+            fontSize: 50,
+            fill: "#000000" 
         });
+    } else {
         achievedScore = this.add.text(75, 185, "You scored " + score + " points!", {
             align: "center",
             fontSize: 50,
             fill: "#000000" 
         });
     }
+   
 }
 
 /**
@@ -227,7 +239,6 @@ function collectCoins(luigi, coin) {
  */
 function teleportPlayer(luigi) {
     luigi.setPosition(50, 155);
-    console.log("overlapping");
 }
 
 /**
